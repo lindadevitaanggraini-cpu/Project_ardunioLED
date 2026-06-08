@@ -18,7 +18,15 @@ void loop() {
 
     //1= merah nyala (tanpa mematikan yang lain)
     if(perintah == '1'){
-      digitalWrite(led_merah, HIGHT);
+      digitalWrite(led_merah, HIGH);
+    }
+
+
+
+
+    //3= hijau menyala
+    else if (perintah == '3'){
+      digitalWrite(led_hijau, HIGH);
     }
 
   
