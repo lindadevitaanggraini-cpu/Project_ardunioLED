@@ -18,31 +18,31 @@ void loop() {
     serial.println(perintah);
 
     //ketik 1= merah nyala (tanpa mematikan yang lain)
-    if(perintah == '1'){
+    if (perintah == '1'){
       digitalWrite(led_merah, HIGH);
     }
     
     //ketik 2= kuning nyala
-
-
+    else if (perintah == '2'){
+      digitalWrite(led_kuning, HIGH);
+    }
 
     //ketik 3= hijau menyala
     else if (perintah == '3'){
       digitalWrite(led_hijau, HIGH);
     }
 
-  
    //ketik 4= semua mati
-   else if (perintah == '4'){
-   digitalWrite(led_merah, LOW);
-
-   digitalWrite(led_hijau, LOW);
-  
+    else if (perintah == '4'){
+      digitalWrite(led_merah, LOW);
+      digitalWrite(led_kuning, LOW);
+      digitalWrite(led_hijau, LOW);
+   }
    //ketik 5= semua nyala
-   else if (perintah == '5'){
-   digitalWrite(led_merah, HIGH);
-
-   digitalWrite(led_hijau, HIGH);
-  
+    else if (perintah == '5'){
+      digitalWrite(led_merah, HIGH);
+      digitalWrite(led_kuning, HIGH);
+      digitalWrite(led_hijau, HIGH);
+   }
   }
 }
