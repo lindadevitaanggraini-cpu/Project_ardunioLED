@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontrol LED</title>
+    <style>
+        /* Mengatur latar belakang dan penempatan ke tengah layar */
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #eef2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Desain kartu (card) bergaya modern */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            font-size: 22px;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+
+        /* Mempercantik area status data */
+        #data {
+            color: #7f8c8d;
+            font-style: italic;
+            font-size: 14px;
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 20px;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background-color: #ecf0f1;
+            margin: 20px 0 25px 0;
+        }
+
+        /* Desain dasar tombol */
+        button {
+            padding: 14px 15px;
+            margin: 6px 0;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        /* Variasi warna khusus untuk setiap tombol agar interaktif dan terbedakan */
+        .btn-merah { 
+            background-color: #e74c3c; 
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        .btn-merah:hover { background-color: #c0392b; transform: translateY(-2px); }
+
+        .btn-kuning { 
+            background-color: #f1c40f; 
+            color: #2c3e50; 
+            box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3);
+        }
+        .btn-kuning:hover { background-color: #f39c12; transform: translateY(-2px); }
+
+        .btn-hijau { 
+            background-color: #2ecc71; 
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+        .btn-hijau:hover { background-color: #27ae60; transform: translateY(-2px); }
+
+        .btn-nyala-semua { 
+            background-color: #3498db; 
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        .btn-nyala-semua:hover { background-color: #2980b9; transform: translateY(-2px); }
+
+        .btn-mati { 
+            background-color: #34495e; 
+            box-shadow: 0 4px 15px rgba(52, 73, 94, 0.3);
+        }
+        .btn-mati:hover { background-color: #2c3e50; transform: translateY(-2px); }
+
+        /* Efek ketika tombol diklik */
+        button:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>ARDUINO CONTROL MANAGER</h2>
+        <p id="data">Menunggu data dari Arduino...</p>
+        <hr>
+
+        <button class="btn-merah" onclick="Arduino('1')">Nyalakan Merah</button>
+        <button class="btn-kuning" onclick="Arduino('2')">Nyalakan Kuning</button>
+        <button class="btn-hijau" onclick="Arduino('3')">Nyalakan Hijau</button>
+        
+        <br><br>
+        
+        <button class="btn-nyala-semua" onclick="Arduino('5')">Nyalakan Semua</button>
+        <button class="btn-mati" onclick="Arduino('4')">Matikan Semua</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        
+        // Menerima data balasan dari Arduino via Node.js
+        socket.on("data", ({ data }) => {
+            let component = document.getElementById("data");
+            component.textContent = "Status Serial: " + data;
+        });
+
+        // Mengirim data perintah ke server Node.js
+        function Arduino(data) {
+            fetch("http://localhost:3000/arduinoApi", {
+                method: "POST",
+                body: JSON.stringify({ data }),
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => {
+                console.log("Kode perintah '" + data + "' terkirim!");
+            })
+            .catch(error => {
+                console.error("Gagal mengirim data:", error);
+            });
+        }
+    </script>
+</body>
+</html>
